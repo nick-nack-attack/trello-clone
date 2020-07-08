@@ -1,9 +1,17 @@
+// define styles in seperate constant
 import styled from 'styled-components';
 
+// for lists, rendered on dark bg
+// for tasks, rendered on light bg
 interface AddItemButtonProps {
     dark?: boolean;
 };
 
+interface DragPreviewContainerProps {
+    isHidden?: boolean
+};
+
+/* arrange columns horizontally */
 export const AppContainer = styled.div`
     align-items: flex-start;
     background-color: #3179ba;
@@ -14,23 +22,25 @@ export const AppContainer = styled.div`
     width: 100%;
 `;
 
-export const AddItemButton = 
-    styled.button<AddItemButtonProps>`
-        background-color: #ffffff3d;
-        border-radius: 3px;
-        border: none;
-        color: ${props => (props.dark ? "#000" : "#fff")};
-        cursor: pointer;
-        max-width: 300px;
-        padding: 10px 12px;
-        text-align: left;
-        transition: background 85ms ease-in;
-        width: 100%
-        &:hover {
-            background-color: #ffffff52;
-        }
-    `;
+// 
+export const AddItemButton = styled.button<AddItemButtonProps>`
+    background-color: #ffffff3d;
+    border-radius: 3px;
+    border: none;
+    color: ${props => (props.dark ? "#000" : "#fff")};
+    cursor: pointer;
+    max-width: 300px;
+    padding: 10px 12px;
+    text-align: left;
+    transition: background 85ms ease-in;
+    width: 100%
+    &:hover {
+        background-color: #ffffff52;
+    }
+`;
 
+// specify cursor to indicate interactivity
+// box-shadow to make it look nice :-p
 export const CardContainer = styled.div`
     background-color: #fff;
     cursor: pointer;
@@ -41,7 +51,14 @@ export const CardContainer = styled.div`
     box-shadow: #091e4240 0px 1px 0px 0px;
 `;
 
-export const ColumnContainer = styled.div`
+export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
+    transform: ${props => (props.isPreview ? "rotate(5deg)" : undefined)};  
+    opacity: ${props => (props.isHidden ? 0 : 1)};
+`;
+
+// set grey bg and rounded corners
+// flex grow 0 so component doesnt take up all horizontal space
+export const ColumnContainer = styled(DragPreviewContainer)`
     background-color: #ebecf0;
     width: 300px;
     min-height: 40px;
@@ -51,11 +68,23 @@ export const ColumnContainer = styled.div`
     flex-grow: 0;
 `;
 
+export const CustomDragLayerContainer = styled.div`
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+`;
+
+// make column title bold and add padding
 export const ColumnTitle = styled.div`
     padding: 6px 16px 12px;
     font-weight: bold;
 `;
 
+// button is green with nice rounded corners
 export const NewItemButton = styled.button`
     background-color: #5aac44;
     border-radius: 3px;

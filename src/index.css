@@ -1,12 +1,14 @@
+html {
+  /* include elements padding and border in width and height calc*/
+  box-sizing: border-box;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
 
-html {
-  box-sizing: border-box;
-}
-
 html, body, #root {
+  /* html and body take up whole screen vertically */
   height: 100%;
 }
 
