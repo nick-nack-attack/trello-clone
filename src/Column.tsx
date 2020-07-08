@@ -1,5 +1,10 @@
 // component for columns
 import React from "react";
+
+// components
+import { AddNewItem } from "./AddNewItem";
+
+
 // import styles
 import { ColumnContainer, ColumnTitle } from "./styles";
 
@@ -17,6 +22,11 @@ export const Column = ({
                 { text }
             </ColumnTitle>
                 { children }
+                <AddNewItem
+                    toggleButtonText="+ Add another task"
+                    onAdd={ console.log }
+                    dark
+                />
         </ColumnContainer>
     )
 };
