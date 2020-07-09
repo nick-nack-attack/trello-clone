@@ -1,13 +1,13 @@
 // state context for app
 import React, { createContext, useReducer, useContext } from "react";
-
-// util
+// utils
 import { v4 as uuidv4 } from "uuid";
-
 import { findItemIndexById } from "./utils/findItemIndexById";
-import { DragItem } from "./DragItem";
-import { moveItem } from "./moveItem";
-import { stat } from "fs";
+// hooks
+import { DragItem } from "./utils/DragItem";
+import { moveItem } from "./utils/moveItem";
+
+//
 
 interface Task {
     id: string
@@ -25,6 +25,12 @@ interface AppStateContextProps {
     dispatch: Function
 };
 
+export interface AppState {
+    lists: List[],
+    draggedItem?: Object 
+};
+
+// using discriminated union
 type Action = (
 | 
     {
@@ -36,29 +42,20 @@ type Action = (
     {
         // for adding a new task functionality
         type: "ADD_TASK"
-        payload: { 
-            text: string 
-            taskId: string 
-        } 
+        payload: { text: string; taskId: string } 
     }
 | 
     {
         // used for moving functionality
         type: "MOVE_LIST"
-        payload: {
-            dragIndex: number
-            hoverIndex: number
-        }
+        // start dragging column, remember original position and pass it as dragIndex
+        // when we hover other columns, take their positions and pass it as hoverIndex
+        payload: { dragIndex: number; hoverIndex: number }
     }
 |
     {
         type: "MOVE_TASK"
-        payload: {
-            dragIndex: number
-            hoverIndex: number
-            sourceColumn: string
-            targetColumn: string
-        }
+        payload: { dragIndex: number; hoverIndex: number; sourceColumn: string; targetColumn: string }
     }
 |
     {
@@ -68,11 +65,17 @@ type Action = (
 );
 
 // set context
-const AppStateContext = createContext<AppStateContextProps>({} as AppStateContextProps);
+const AppStateContext = (
+    // pass empty object to cast to ASCP to createConext func
+    createContext<AppStateContextProps>(
+        {} as AppStateContextProps
+    )
+);
 
 // Task / List for data types
 // Column / Card for UI components
 
+// data object has AppState type
 const appData: AppState = {
     lists: [
         {
@@ -102,10 +105,16 @@ const appData: AppState = {
     ]
 };
 
+// useReducer is hook that allows us to manage complex state
+// ex. including objects with multipule fields
 const appStateReducer = ( state: AppState, action: Action ): AppState => {
+    // don't need to define const for action types
+    // TS throws error at attempt to compare action.type 
+    // to something its not
     switch (action.type) {
+        // curly brackets for block scope
+        // so now visible across whole switch block
         case "ADD_LIST": {
-            // reducer logic here
             return {
                 ...state,
                 lists: [
@@ -123,12 +132,12 @@ const appStateReducer = ( state: AppState, action: Action ): AppState => {
             const targetLaneIndex = findItemIndexById(
                 state.lists,
                 action.payload.taskId
-            )
+            );
             // push new task object to list with that index
             state.lists[targetLaneIndex].tasks.push({
                 id: uuidv4(),
                 text: action.payload.text
-            })
+            });
             // return nw object from old state using spread syntax
             return {
                 ...state
@@ -136,6 +145,8 @@ const appStateReducer = ( state: AppState, action: Action ): AppState => {
         };
         case "MOVE_LIST": {
             const { dragIndex, hoverIndex } = action.payload;
+            // calc new value for lists array
+            // moveItem takes the source array and two indices that it will swap
             state.lists = moveItem(state.lists, dragIndex, hoverIndex)
             return {
                 ...state
@@ -143,10 +154,7 @@ const appStateReducer = ( state: AppState, action: Action ): AppState => {
         };
         case "SET_DRAGGED_ITEM": {
             // set draggedItem field to whatever is passed in from payload
-            return { 
-                ...state,
-                draggedItem: action.payload
-            };
+            return { ...state, draggedItem: action.payload };
         };
         case "MOVE_TASK": {
             const {
@@ -169,21 +177,25 @@ const appStateReducer = ( state: AppState, action: Action ): AppState => {
     };
 };
 
-export interface AppState {
-    lists: List[]
-};
-
-// export state
 export const useAppState = () => {
+    // retrieve value from AppStateContext using useContext
+    // then return the result
     return useContext(AppStateContext)
 };
 
-// export provider
+// only accepts children as prop
+// R.PWC requires one generic arg, but pass empty object
+// bc we dont want any other props
 export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {
+    // Reducer is func that calculates new state
+    // by combining old state with an action object
+    // Dispatch is method usd to send actions to reducer
     const [ state, dispatch ] = useReducer(appStateReducer, appData);
+
     return (
         <AppStateContext.Provider value={{ state, dispatch }}>
             { children }
         </AppStateContext.Provider>
     );
+
 };

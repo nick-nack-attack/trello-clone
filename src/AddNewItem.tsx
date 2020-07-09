@@ -28,7 +28,7 @@ export const AddNewItem = (props: AddNewItemProps) => {
                 onAdd={ text => {
                     onAdd(text)
                     setShowForm(false)
-                } }
+                }}
             />
         );
     };

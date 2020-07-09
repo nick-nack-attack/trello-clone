@@ -9,7 +9,13 @@ interface AddItemButtonProps {
 
 interface DragPreviewContainerProps {
     isHidden?: boolean
+    isPreview?: boolean
 };
+
+export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
+    transform: ${ props => (props.isPreview ? "rotate(5deg)" : undefined) };  
+    opacity: ${ props => (props.isHidden ? 0 : 1) };
+`;
 
 /* arrange columns horizontally */
 export const AppContainer = styled.div`
@@ -51,11 +57,6 @@ export const CardContainer = styled.div`
     box-shadow: #091e4240 0px 1px 0px 0px;
 `;
 
-export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
-    transform: ${props => (props.isPreview ? "rotate(5deg)" : undefined)};  
-    opacity: ${props => (props.isHidden ? 0 : 1)};
-`;
-
 // set grey bg and rounded corners
 // flex grow 0 so component doesnt take up all horizontal space
 export const ColumnContainer = styled(DragPreviewContainer)`
@@ -68,6 +69,8 @@ export const ColumnContainer = styled(DragPreviewContainer)`
     flex-grow: 0;
 `;
 
+// want this container rendered on top of everything, so z-index:100
+// pointer-events:none will ignore all mouse events
 export const CustomDragLayerContainer = styled.div`
     height: 100%;
     left: 0;

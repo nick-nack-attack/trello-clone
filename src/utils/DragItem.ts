@@ -1,16 +1,14 @@
-import { type } from "os";
-
 // drag item component
-export type CardDragItem = {
-    index: number
+type CardDragItem = {
+    index?: number
     id: string
     columnId: string
     text: string
     type: "CARD"
 };
 
-export type ColumnDragItem = {
-    index: number
+type ColumnDragItem = {
+    index?: number
     id: string
     text: string
     type: "COLUMN"
