@@ -27,7 +27,7 @@ interface AppStateContextProps {
 
 export interface AppState {
     lists: List[],
-    draggedItem?: Object 
+    draggedItem?: any;
 };
 
 // using discriminated union
@@ -55,7 +55,12 @@ type Action = (
 |
     {
         type: "MOVE_TASK"
-        payload: { dragIndex: number; hoverIndex: number; sourceColumn: string; targetColumn: string }
+        payload: { 
+            dragIndex: number; 
+            hoverIndex: number; 
+            sourceColumn: string; 
+            targetColumn: string;
+        }
     }
 |
     {

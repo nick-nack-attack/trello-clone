@@ -12,11 +12,13 @@ export const useItemDrag = (item: DragItem) => {
         // item contains data about to be dragged
         item,
         // called when we start dragging an item
-        begin: () => dispatch({
-            type: "SET_DRAGGED_ITEM",
-            // when dragging, store the item in state
-            payload: item
-        }),
+        begin: () => {
+            dispatch({
+                type: "SET_DRAGGED_ITEM",
+                // when dragging, store the item in state
+                payload: item
+            })
+        },
         // called when we release item
         end: () => dispatch({ 
             type: "SET_DRAGGED_ITEM",

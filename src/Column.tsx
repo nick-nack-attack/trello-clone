@@ -38,7 +38,6 @@ export const Column = ({
         const ref = useRef<HTMLDivElement>(null);
         const { drag } = useItemDrag({ type: "COLUMN", id, index, text });
 
-        /*
         const [, drop] = useDrop({
             // pass accepted item type
             accept: ["COLUMN", "CARD"],
@@ -48,9 +47,10 @@ export const Column = ({
 
                 if (item.type === "COLUMN") {
                     const dragIndex = item.index;
-                    const hoverIndex = id;
+                    const hoverIndex = parseInt(id);
                     // check if not the same which means
                     // we are not hovering above the dragged item
+
                     if (dragIndex === hoverIndex) {
                         return
                     };
@@ -60,7 +60,7 @@ export const Column = ({
                             dragIndex,
                             hoverIndex
                         }
-                    })
+                    });
                     item.index = hoverIndex;
                 } else {
                     const dragIndex = item.index;
@@ -85,15 +85,15 @@ export const Column = ({
             }
         })
 
-        drag(drop(ref))
-        */
+        drag(drop(ref));
+       
     return (
 
         <ColumnContainer 
             // specify a drag target
             isPreview={ isPreview }
             ref={ ref } 
-            // isHidden={ isHidden(isPreview, state.draggedItem, "COLUMN", id) }
+            isHidden={ isHidden(isPreview, state.draggedItem, "COLUMN", id) }
         >
 
             <ColumnTitle>
@@ -103,6 +103,7 @@ export const Column = ({
                 { /* get column by index */ }
                 { state.lists[index].tasks.map((task, i) => (
                     <Card 
+                        columnId={ id }
                         text={ task.text }
                         key={ task.id }
                         index={ i }
@@ -117,7 +118,7 @@ export const Column = ({
                         payload: {
                             text,
                             // this is task id as its a task being added
-                            taskId: id
+                            columnId: id
                         }
                     })}
                     dark

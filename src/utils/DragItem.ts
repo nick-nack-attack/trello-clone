@@ -1,6 +1,6 @@
 // drag item component
 type CardDragItem = {
-    index?: number
+    index: number
     id: string
     columnId: string
     text: string
@@ -8,10 +8,11 @@ type CardDragItem = {
 };
 
 type ColumnDragItem = {
-    index?: number
+    index: number
     id: string
     text: string
     type: "COLUMN"
 };
+
 
 export type DragItem = CardDragItem | ColumnDragItem;
