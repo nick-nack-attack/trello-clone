@@ -1,14 +1,11 @@
 // main app
 import React from "react";
 
-//componnts
-import { AddNewItem } from './AddNewItem';
+// components
+import { AddNewItem } from "./AddNewItem";
 import { AppContainer } from "./styles";
 import { Card } from "./Card";
 import { Column } from "./Column";
-
-// styling
-import './App.css';
 
 const App = () => {
   return (

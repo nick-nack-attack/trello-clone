@@ -9,8 +9,8 @@ import { AddNewItem } from "./AddNewItem";
 import { ColumnContainer, ColumnTitle } from "./styles";
 
 interface ColumnProps {
-    text?: string;
-};
+    text: string;
+}
 
 export const Column = ({
     text,
